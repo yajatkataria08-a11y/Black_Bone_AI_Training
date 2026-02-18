@@ -86,7 +86,6 @@ Training Epochs:
 
 3.1 Training Curve Analysis
 
-[Insert Figure 1: Training vs Validation Loss Curve]
 
 Observation:
 Training loss decreases steadily.
@@ -98,7 +97,6 @@ Clear overfitting after Epoch 12.
 
 -------------------------------------------------------------
 
-[Insert Figure 2: Training vs Validation mIoU Curve]
 
 Validation mIoU peaks at:
 
@@ -132,7 +130,6 @@ Logs:           0.13
 Lush Bushes:    ~0.08
 Dry Bushes:     ~0.02
 
-[Insert Figure 4: Per-Class IoU Across Epochs]
 
 Observations:
 
@@ -240,5 +237,6 @@ Potential improvements:
 =====================================================================
 END OF REPORT
 =====================================================================
+
 
 
