@@ -1,7 +1,7 @@
-=====================================================================
+
 GHR 2.0 Hackathon Report
 Offroad Semantic Scene Segmentation
-=====================================================================
+
 
 Team Name: Black Bone
 Project Name: DesertScene Robust Segmentation
@@ -241,4 +241,5 @@ Potential improvements:
 =====================================================================
 END OF REPORT
 =====================================================================
+
 
