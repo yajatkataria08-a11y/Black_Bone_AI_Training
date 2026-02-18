@@ -3,7 +3,7 @@ GHR 2.0 Hackathon Report
 Offroad Semantic Scene Segmentation
 =====================================================================
 
-Team Name: [Your Team Name]
+Team Name: Black Bone
 Project Name: DesertScene Robust Segmentation
 Track: Segmentation
 Platform: Falcon Synthetic Desert Dataset
@@ -45,6 +45,8 @@ Ground Clutter, Logs, Rocks, Landscape, Sky, Background
 Observation:
 Landscape and Sky dominate pixel distribution.
 Vegetation subclasses and Logs are underrepresented.
+<img width="1465" height="712" alt="image" src="https://github.com/user-attachments/assets/b9ca7317-98c9-48bc-a9e3-52af4aa52ac9" />
+<img width="1474" height="693" alt="image" src="https://github.com/user-attachments/assets/c0c11b73-7664-4b2e-acc6-6dd875509f53" />
 
 -------------------------------------------------------------
 
@@ -86,7 +88,6 @@ Training Epochs:
 
 3.1 Training Curve Analysis
 
-[Insert Figure 1: Training vs Validation Loss Curve]
 
 Observation:
 Training loss decreases steadily.
@@ -95,10 +96,12 @@ then increases significantly.
 
 Conclusion:
 Clear overfitting after Epoch 12.
+<img width="2100" height="1500" alt="metrics" src="https://github.com/user-attachments/assets/9537d522-5685-4791-a1df-f40b86b20f3b" />
 
 -------------------------------------------------------------
 
-[Insert Figure 2: Training vs Validation mIoU Curve]
+<img width="2100" height="900" alt="per_class_iou" src="https://github.com/user-attachments/assets/13ac89fa-7611-4269-90bb-31bd36a03375" />
+
 
 Validation mIoU peaks at:
 
@@ -110,8 +113,6 @@ Final selected checkpoint:
 Epoch 14 (Val mIoU = 0.2632)
 
 -------------------------------------------------------------
-
-[Insert Figure 3: Dice & Accuracy Trends]
 
 Dice and Accuracy follow similar patterns:
 Peak performance occurs between Epoch 10–14.
@@ -134,7 +135,6 @@ Logs:           0.13
 Lush Bushes:    ~0.08
 Dry Bushes:     ~0.02
 
-[Insert Figure 4: Per-Class IoU Across Epochs]
 
 Observations:
 
@@ -151,23 +151,19 @@ Failure Case 1: Dry Bushes Collapse
 Reason:
 Visual similarity to Landscape and class imbalance.
 
-[Insert Figure 5: RGB vs Ground Truth vs Prediction – Dry Bushes]
-
 -------------------------------------------------------------
 
 Failure Case 2: Logs Under-Segmentation
 Reason:
 Small object size and occlusion by vegetation.
 
-[Insert Figure 6: RGB vs Ground Truth vs Prediction – Logs]
+
 
 -------------------------------------------------------------
 
 Failure Case 3: Rocks vs Landscape Confusion
 Reason:
 Similar texture and boundary blending.
-
-[Insert Figure 7: RGB vs Ground Truth vs Prediction – Rocks]
 
 -------------------------------------------------------------
 
@@ -209,11 +205,11 @@ Observations:
 - Vegetation classes degrade slightly.
 - Structural layout understanding preserved.
 
-[Insert Figure 8: Prediction on Unseen Biome Image]
 
 Conclusion:
 Model generalizes reasonably well to biome shifts
 but remains sensitive to minority class variations.
+<img width="548" height="850" alt="image" src="https://github.com/user-attachments/assets/60bd501d-30cd-4715-b26e-ac6d35f88ba8" />
 
 =====================================================================
 7. CONCLUSION
@@ -245,3 +241,4 @@ Potential improvements:
 =====================================================================
 END OF REPORT
 =====================================================================
+
