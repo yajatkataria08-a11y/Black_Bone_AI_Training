@@ -1,245 +1,184 @@
 
-GHR 2.0 Hackathon Report
-Offroad Semantic Scene Segmentation
+# GHR 2.0 Hackathon Report  
+## Offroad Semantic Scene Segmentation  
+
+**Team Name:** Black Bone  
+**Project Name:** DesertScene Robust Segmentation  
+**Track:** Segmentation  
+
+---
+
+# 1. Project Summary
+
+This project focuses on training a semantic segmentation model on a synthetic desert dataset and evaluating its ability to generalize to unseen desert environments.
+
+**Primary Metric:** Mean Intersection over Union (mIoU)  
+**Best Validation mIoU Achieved:** **0.2632 (Epoch 14)**  
+
+### Key Challenges
+- Severe class imbalance  
+- Small-object segmentation difficulty  
+- Texture similarity (Rocks vs Landscape)  
+- Overfitting during extended training  
+
+---
+
+# 2. Methodology
+
+## Model Architecture
+
+- **Backbone:** Vision Transformer (DINOv2 encoder)  
+- **Decoder:** Segmentation upsampling head  
+- **Loss Function:** Class-weighted Cross Entropy  
+- **Optimizer:** AdamW  
+- **Learning Rate:** 0.001 with cosine decay  
+- **Mixed Precision:** Enabled (AMP)  
+- **Checkpoint Strategy:** Best validation mIoU selected  
+<img width="1465" height="712" alt="image" src="https://github.com/user-attachments/assets/859c834d-a859-4267-bbbd-16779848e100" />
+<img width="1474" height="693" alt="image" src="https://github.com/user-attachments/assets/14aac49b-d7db-43f3-ab2f-2735a327265b" />
+
+---
+
+# 3. Training Curve Analysis
+
+## 3.1 Training vs Validation Loss
+<img width="2100" height="1500" alt="metrics" src="https://github.com/user-attachments/assets/3f28b6b7-0b63-4aaf-8c6a-2abe9c277f49" />
 
 
-Team Name: Black Bone
-Project Name: DesertScene Robust Segmentation
-Track: Segmentation
-Platform: Falcon Synthetic Desert Dataset
 
-=====================================================================
-1. TITLE & PROJECT SUMMARY
-=====================================================================
+Validation loss decreases until approximately **Epoch 12**, then increases significantly — indicating overfitting.
 
-This project focuses on training a semantic segmentation model
-on a synthetic desert dataset and evaluating its ability to
-generalize to unseen desert environments.
+---
 
-The goal is to achieve strong pixel-level classification
-performance while maintaining robustness across biome shifts.
+## 3.2 Training vs Validation mIoU
 
-Primary Evaluation Metric:
-Mean Intersection over Union (mIoU)
-
-Key Challenges:
-- Severe class imbalance
-- Small object segmentation difficulty
-- Texture similarity between terrain classes
-- Overfitting during training
-
-=====================================================================
-2. METHODOLOGY
-=====================================================================
-
-2.1 Dataset
-
-Training Images: 2857
-Validation Images: 317
-Test Set: Unseen desert biome
-
-Classes:
-Trees, Lush Bushes, Dry Grass, Dry Bushes,
-Ground Clutter, Logs, Rocks, Landscape, Sky, Background
-
-Observation:
-Landscape and Sky dominate pixel distribution.
-Vegetation subclasses and Logs are underrepresented.
-<img width="1465" height="712" alt="image" src="https://github.com/user-attachments/assets/b9ca7317-98c9-48bc-a9e3-52af4aa52ac9" />
-<img width="1474" height="693" alt="image" src="https://github.com/user-attachments/assets/c0c11b73-7664-4b2e-acc6-6dd875509f53" />
-
--------------------------------------------------------------
-
-2.2 Model Architecture
-
-Backbone:
-Vision Transformer (DINOv2 encoder)
-
-Decoder:
-Upsampling segmentation head
-
-Loss Function:
-Class-weighted Cross Entropy
-
-Optimizer:
-AdamW
-
-Learning Rate:
-0.001 with cosine decay scheduling
-
-Mixed Precision:
-Enabled (AMP)
-
-Training Epochs:
-50 (Best checkpoint selected early)
-
--------------------------------------------------------------
-
-2.3 Training Strategy
-
-- Class weighting to address imbalance
-- Validation monitoring for early stopping
-- Best model saved based on validation mIoU
-- Cosine LR scheduling to stabilize convergence
-
-=====================================================================
-3. RESULTS & PERFORMANCE METRICS
-=====================================================================
-
-3.1 Training Curve Analysis
-
-
-Observation:
-Training loss decreases steadily.
-Validation loss decreases until ~Epoch 12,
-then increases significantly.
-
-Conclusion:
-Clear overfitting after Epoch 12.
-<img width="2100" height="1500" alt="metrics" src="https://github.com/user-attachments/assets/9537d522-5685-4791-a1df-f40b86b20f3b" />
-
--------------------------------------------------------------
-
-<img width="2100" height="900" alt="per_class_iou" src="https://github.com/user-attachments/assets/13ac89fa-7611-4269-90bb-31bd36a03375" />
+<img width="2100" height="900" alt="per_class_iou" src="https://github.com/user-attachments/assets/114c0d6b-bc45-42d3-9152-60c16a6391e2" />
 
 
 Validation mIoU peaks at:
 
-Epoch 14 → 0.2632 (Best Model)
+> **Epoch 14 → 0.2632**
 
-After this point, validation performance declines.
+After this point, performance declines due to overfitting.  
+The best checkpoint was selected at this peak.
 
-Final selected checkpoint:
-Epoch 14 (Val mIoU = 0.2632)
+---
 
--------------------------------------------------------------
-
-Dice and Accuracy follow similar patterns:
-Peak performance occurs between Epoch 10–14.
-
-=====================================================================
-3.2 PER-CLASS IoU ANALYSIS
-=====================================================================
-
-Best Validation mIoU: 0.2632
-
-Per-Class IoU at Best Epoch:
-
-Sky:            0.63 – 0.69
-Landscape:      0.47 – 0.48
-Trees:          0.28
-Dry Grass:      0.24 – 0.27
-Rocks:          0.22 – 0.23
-Ground Clutter: 0.15
-Logs:           0.13
-Lush Bushes:    ~0.08
-Dry Bushes:     ~0.02
+## 3.3 Dice & Accuracy Trends
 
 
-Observations:
+Both Dice and Accuracy follow similar behavior, peaking between **Epoch 10–14** and declining afterward.
 
-- Sky and Landscape perform strongly due to dominance.
+---
+
+# 4. Per-Class IoU Analysis
+
+
+### Best Epoch Per-Class IoU Summary
+
+| Class | IoU |
+|--------|------|
+| Sky | ~0.69 |
+| Landscape | ~0.48 |
+| Trees | ~0.28 |
+| Dry Grass | ~0.27 |
+| Rocks | ~0.23 |
+| Ground Clutter | ~0.15 |
+| Logs | ~0.13 |
+| Lush Bushes | ~0.08 |
+| Dry Bushes | ~0.02 |
+
+### Observations
+
+- Large-area classes perform strongly.
 - Minority vegetation classes remain unstable.
 - Dry Bushes collapse due to extreme underrepresentation.
-- Logs suffer from small object size and occlusion.
+- Logs struggle due to occlusion and small size.
+- Clear impact of class imbalance.
 
-=====================================================================
-4. FAILURE CASE ANALYSIS
-=====================================================================
+---
 
-Failure Case 1: Dry Bushes Collapse
-Reason:
-Visual similarity to Landscape and class imbalance.
+# 5. Failure Case Analysis
 
--------------------------------------------------------------
+## Case 1: Dry Bushes Misclassified as Landscape
 
-Failure Case 2: Logs Under-Segmentation
-Reason:
-Small object size and occlusion by vegetation.
+Reason: Visual similarity + class imbalance.
 
 
+---
 
--------------------------------------------------------------
+## Case 2: Logs Under-Segmented
 
-Failure Case 3: Rocks vs Landscape Confusion
-Reason:
-Similar texture and boundary blending.
+Reason: Small object size and occlusion
 
--------------------------------------------------------------
+---
 
-Root Cause Summary:
-The model prioritizes dominant terrain classes.
-Minority classes require stronger regularization
-or data balancing techniques.
+## Case 3: Rocks vs Landscape Confusion
 
-=====================================================================
-5. CHALLENGES & SOLUTIONS
-=====================================================================
-
-Challenge 1: Overfitting After Epoch 12
-Solution:
-Selected best checkpoint using validation mIoU.
-Applied learning rate scheduling.
-
--------------------------------------------------------------
-
-Challenge 2: Class Imbalance
-Solution:
-Implemented class-weighted loss to increase penalty
-for minority class misclassification.
-
--------------------------------------------------------------
-
-Challenge 3: Minority Class Instability
-Solution:
-Monitored per-class IoU and analyzed collapse behavior.
-
-=====================================================================
-6. GENERALIZATION TO UNSEEN BIOME
-=====================================================================
-
-The model was evaluated on unseen desert test images.
-
-Observations:
-- Strong terrain and sky segmentation maintained.
-- Vegetation classes degrade slightly.
-- Structural layout understanding preserved.
+Reason: Texture similarity and boundary blending.
 
 
-Conclusion:
-Model generalizes reasonably well to biome shifts
-but remains sensitive to minority class variations.
-<img width="548" height="850" alt="image" src="https://github.com/user-attachments/assets/60bd501d-30cd-4715-b26e-ac6d35f88ba8" />
+---
 
-=====================================================================
-7. CONCLUSION
-=====================================================================
+# 6. Training Log Verification
+
+
+The log confirms automatic saving of the best model at:
+
+> Validation mIoU = **0.2632**
+
+---
+
+# 7. Generalization to Unseen Biome
+
+The model was evaluated on unseen desert images.
+
+### Observations
+
+- Strong Sky and Landscape segmentation maintained.
+- Moderate degradation in minority vegetation classes.
+- Structural terrain understanding preserved.
+
+*(Insert unseen biome prediction image if available)*
+
+---
+
+# 8. Challenges & Solutions
+
+### Overfitting
+Detected via divergence between training and validation curves.  
+Solved by selecting early checkpoint.
+
+### Class Imbalance
+Addressed using class-weighted loss.
+
+### Minority Class Instability
+Monitored per-class IoU trends.
+
+---
+
+# 9. Conclusion
 
 This project demonstrates:
 
-- Successful transformer-based segmentation training
-- Peak validation mIoU of 0.2632
-- Effective overfitting detection and control
-- Detailed per-class analysis
-- Robust dominant terrain understanding
+- Successful transformer-based segmentation training  
+- Peak validation mIoU of **0.2632**  
+- Clear identification of overfitting behavior  
+- Detailed per-class performance analysis  
 
-The primary limitation remains minority vegetation
-class segmentation due to imbalance.
+Primary limitation remains instability in minority vegetation classes.
+<img width="548" height="850" alt="Screenshot 2026-02-19 013134" src="https://github.com/user-attachments/assets/2d72a379-d5ad-4694-b181-ff867a7d96b8" />
 
-=====================================================================
-8. FUTURE WORK
-=====================================================================
+---
 
-Potential improvements:
+# 10. Future Work
 
-- Focal loss for hard pixel mining
-- Stronger data augmentation (CutMix / Copy-Paste)
-- Oversampling minority-class patches
-- Multi-scale training strategy
-- Domain adaptation techniques
+- Focal loss for hard pixel mining  
+- Stronger data augmentation (CutMix, Copy-Paste)  
+- Oversampling minority classes  
+- Multi-scale training  
+- Domain adaptation techniques  
 
-=====================================================================
-END OF REPORT
-=====================================================================
+---
 
-
+**End of Report**
